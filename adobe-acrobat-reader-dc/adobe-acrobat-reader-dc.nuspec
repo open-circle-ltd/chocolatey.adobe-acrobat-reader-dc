@@ -8,7 +8,7 @@
     <owners>ITIGO AG, Simon Bärlocher</owners>
     <licenseUrl>http://www.adobe.com/products/eulas/pdfs/Reader10_combined-20100625_1419.pdf</licenseUrl>
     <projectUrl>http://www.adobe.com/products/reader.html</projectUrl>
-    <iconUrl>https://github.com/itigoag/chocolatey.adobe-acrobat-reader-dc/icon/adobe-acrobat-reader-dc.png</iconUrl>
+    <iconUrl>https://rawgit.com/itigoag/chocolatey.adobe-acrobat-reader-dc/master/icon/adobe-acrobat-reader-dc.png</iconUrl>
     <description><![CDATA[
 More powerful than other PDF software, Adobe Acrobat Reader DC is the free, trusted standard for viewing, printing, and annotating PDFs. And now, it’s connected to Adobe Document Cloud — so it’s easier than ever to work with PDFs on computers and mobile devices.
 
