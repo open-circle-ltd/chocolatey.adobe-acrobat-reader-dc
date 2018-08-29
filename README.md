@@ -21,7 +21,9 @@ installation with parameters.
 ```powershell
  choco install adobe-acrobat-reader-dc --params="'/RemoveDesktopIcons'"
 ```
+
 ## Disclaimer
+
 These Chocolatey Packages only contain installation routines. The software itself is downloaded from the official sources of the software developer. ITIGO AG has no affilation with the software developer.
 
 ## Author
