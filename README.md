@@ -29,7 +29,7 @@ installation with parameters.
 
 ## License
 
-This project is under the MIT License. See the [LICENSE](licence) file for the full license text.
+This project is under the MIT License. See the [LICENSE](LICENSE) file for the full license text.
 
 ## Copyright
 
