@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop';
 
 $toolsDir            = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
 $PackageParameters   = Get-PackageParameters
-$urlPackage          = 'http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1801120058/AcroRdrDC1801120058_MUI.exe'
+$urlPackage          = 'https://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1801120058/AcroRdrDC1801120058_MUI.exe'
 $checksumPackage     = '541aa7093854aed8067d9bbe6658c6e68df542f029f8a2cb7d7cb65ee5a17277f63f046978497a94f2646b72fb986d15d710b1f1ec8d2520e67c2910e50a4abe'
 $checksumTypePackage = 'SHA512'
 
