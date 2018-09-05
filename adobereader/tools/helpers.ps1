@@ -94,3 +94,13 @@ function Remove-DesktopIcons {
         }
 
 }
+
+function Get-ProductName($programName) {
+    $res = (Get-WMIObject -Query "SELECT * FROM Win32_Product Where Name Like '%$programName%'").Length -ne 0
+    return $res;
+}
+
+function Get-ProductVersion($programName) {
+    $res = (Get-WMIObject -Query "SELECT * FROM Win32_Product Where Name Like '%$programName%'").Version
+    return $res
+}

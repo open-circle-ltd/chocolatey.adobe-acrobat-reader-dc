@@ -25,7 +25,7 @@ function global:au_GetLatest {
     $version     = "20$($Matches[0])"
     $urlVersion  = $Matches[0].Replace(".", "")
     
-    $urlPackage = "https://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/$($urlVersion)/AcroRdrDC$($urlVersion)_MUI.exe"
+    $urlPackage = "http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/$($urlVersion)/AcroRdrDC$($urlVersion)_MUI.exe"
 
     return  @{ 
         URL32          = $urlPackage;

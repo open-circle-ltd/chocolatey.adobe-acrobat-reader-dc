@@ -13,13 +13,13 @@ More powerful than other PDF software, Adobe Acrobat Reader DC is the free, trus
 installation without parameters.
 
 ```ps1
-choco install adobe-acrobat-reader-dc
+choco install adobereader
 ```
 
 installation with parameters.
 
 ```powershell
- choco install adobe-acrobat-reader-dc --params="'/RemoveDesktopIcons'"
+ choco install adobereader --params="'/RemoveDesktopIcons'"
 ```
 
 ## Disclaimer
