@@ -1,11 +1,9 @@
-# adobe-acrobat-reader-dc install
-
-$ErrorActionPreference = 'Stop';
+﻿# adobe-acrobat-reader-dc install
 
 $toolsDir            = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
 $PackageParameters   = Get-PackageParameters
-$urlPackage          = 'http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1801120058/AcroRdrDC1801120058_MUI.exe'
-$checksumPackage     = '541aa7093854aed8067d9bbe6658c6e68df542f029f8a2cb7d7cb65ee5a17277f63f046978497a94f2646b72fb986d15d710b1f1ec8d2520e67c2910e50a4abe'
+$urlPackage          = 'http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1801120063/AcroRdrDC1801120063_MUI.exe'
+$checksumPackage     = '5a755228950a0a7e8b959a6390cbaf68d7d40cf5a003176be832ec09f9a5bd3666686092f2fb959913285aba792d903767a8a31a8d9e756cb2b4fb90d7b88f60'
 $checksumTypePackage = 'SHA512'
 
 Import-Module -Name "$($toolsDir)\helpers.ps1"
@@ -20,9 +18,7 @@ $packageArgs = @{
     validExitCodes = @(0, 1000, 1101)
 }
 
-if (-Not (Get-ProductName("Adobe Acrobat Reader DC MUI") -and ((Get-ProductVersion("Adobe Acrobat Reader DC MUI")).Version -eq $env:ChocolateyPackageVersion))) {
-    Install-ChocolateyPackage @packageArgs
-}
+Install-ChocolateyPackage @packageArgs
 
 if ($PackageParameters.RemoveDesktopIcons) {
     Remove-DesktopIcons -Name "Acrobat Reader DC" -Desktop "Public"

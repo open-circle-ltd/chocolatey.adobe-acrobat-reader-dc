@@ -12,7 +12,6 @@ function Test-RegistryValue {
     catch {
         return $false
     }
-
 }
 
 function Remove-FileItem {
@@ -27,13 +26,11 @@ function Remove-FileItem {
             -Recurse
         Write-Output `
             -InputObject "Remove $($Path)"
-    
     }
     catch {
         Write-Output `
             -InputObject "Failed remove $($Path)"
     }
-
 }
 
 function Update-RegistryValue {
@@ -53,8 +50,6 @@ function Update-RegistryValue {
             -Value $Value
         Write-Output `
             -InputObject $Message
-      
-    
     }
     catch {
         New-ItemProperty `
@@ -65,7 +60,6 @@ function Update-RegistryValue {
         Write-Output `
             -InputObject $Message
     }
-
 }
 
 function Remove-DesktopIcons {
@@ -74,33 +68,30 @@ function Remove-DesktopIcons {
         [parameter(Mandatory = $true)][ValidateNotNullOrEmpty()]$Name,
         [parameter(Mandatory = $false)]$Desktop
     )
+
     if(!$Desktop)  {
-       $Desktop = 'All' 
+       $Desktop = 'All'
     }
-        if ($Desktop -eq 'All') {
-            foreach ($User in Get-ChildItem -Path "C:\Users") {
-                Remove-FileItem -Path "C:\users\$($User)\desktop\$($Name).lnk"
-            }
-            Remove-FileItem -Path "C:\Users\default\desktop\$($Name).lnk"
-            Remove-FileItem -Path "C:\Users\Public\Desktop\$($Name).lnk"
-        } elseif ($Desktop -eq 'Public') {
 
-            Remove-FileItem -Path "C:\Users\Public\Desktop\$($Name).lnk"
-
-        } elseif ($Desktop -eq 'Default') {
-
-            Remove-FileItem -Path "C:\Users\Default\desktop\$($Name).lnk"
-
+    if ($Desktop -eq 'All') {
+        foreach ($User in Get-ChildItem -Path "C:\Users") {
+            Remove-FileItem -Path "C:\users\$($User)\desktop\$($Name).lnk"
         }
-
+        Remove-FileItem -Path "C:\Users\default\desktop\$($Name).lnk"
+        Remove-FileItem -Path "C:\Users\Public\Desktop\$($Name).lnk"
+    } elseif ($Desktop -eq 'Public') {
+        Remove-FileItem -Path "C:\Users\Public\Desktop\$($Name).lnk"
+    } elseif ($Desktop -eq 'Default') {
+        Remove-FileItem -Path "C:\Users\Default\desktop\$($Name).lnk"
+    }
 }
 
 function Get-ProductName($programName) {
-    $res = (Get-WMIObject -Query "SELECT * FROM Win32_Product Where Name Like '%$programName%'").Length -ne 0
+    $res = (Get-CimInstance -Query "SELECT * FROM Win32_Product Where Name Like '%$programName%'").Length -ne 0
     return $res;
 }
 
 function Get-ProductVersion($programName) {
-    $res = (Get-WMIObject -Query "SELECT * FROM Win32_Product Where Name Like '%$programName%'").Version
+    $res = (Get-CimInstance  -Query "SELECT * FROM Win32_Product Where Name Like '%$programName%'").Version
     return $res
 }
