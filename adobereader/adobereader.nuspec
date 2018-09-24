@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>adobereader</id>
-    <version>2018.011.20058</version>
+    <version>2018.011.20063</version>
     <title>Adobe Acrobat Reader DC</title>
     <authors>Adobe</authors>
     <owners>ITIGO AG, Simon Bärlocher</owners>
@@ -22,4 +22,8 @@ More powerful than other PDF software, Adobe Acrobat Reader DC is the free, trus
     <docsUrl>https://helpx.adobe.com/reader.html</docsUrl>
     <releaseNotes>https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotes/index.html</releaseNotes>
   </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+    <file src="**" exclude="**\README.md;**\update.ps1" />
+  </files>
 </package>
