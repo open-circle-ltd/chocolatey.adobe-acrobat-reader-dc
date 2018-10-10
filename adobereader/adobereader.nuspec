@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>adobereader</id>
-    <version>2018.011.20063</version>
+    <version>2019.008.20071</version>
     <title>Adobe Acrobat Reader DC</title>
     <authors>Adobe</authors>
     <owners>ITIGO AG, Simon Bärlocher</owners>
