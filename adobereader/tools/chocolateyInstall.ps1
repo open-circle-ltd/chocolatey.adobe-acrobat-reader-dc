@@ -17,33 +17,33 @@ if ($key.Count -eq 1) {
    if ($key[0].DisplayName -notmatch 'MUI') {
       if ($InstalledVersion -ge $InstallerVersion) {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
-         Write-Warning "This multi-language (MUI) package cannot overwrite it at this time."
+         Write-Warning 'This multi-language (MUI) package cannot overwrite it at this time.'
          Write-Warning "You will need to uninstall $($key[0].DisplayName) first."
-         Throw "Installation halted."
+         Throw 'Installation halted.'
       } else {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
-         Write-Warning  "This package will replace it with the multi-language (MUI) release."
+         Write-Warning  'This package will replace it with the multi-language (MUI) release.'
       }
    } else {
       $MUIinstalled = $true
       $UpdaterVersion = Split-Path $MUImspURL.split('/')[-2]
       if ($InstalledVersion -eq $UpdaterVersion) {
-         Write-Verbose "Currently installed version is the same as this package.  Nothing further to do."
+         Write-Verbose 'Currently installed version is the same as this package.  Nothing further to do.'
          Return
       } elseif ($InstalledVersion -gt $UpdaterVersion) {
          Write-Warning "$($key[0].DisplayName) v20$($key[0].DisplayVersion) installed."
          Write-Warning "This package installs v$env:ChocolateyPackageVersion and cannot replace a newer version."
-         Throw "Installation halted."
+         Throw 'Installation halted.'
       } elseif (($InstalledVersion -ge $InstallerVersion) -and ($InstalledVersion -lt $UpdaterVersion)) {
          $UpdateOnly = $true
       }
    }
 } elseif ($key.count -gt 1) {
    Write-Warning "$($key.Count) matching installs of Adobe Acrobat Reader DC found!"
-   Write-Warning "To prevent accidental data loss, this install will be aborted."
-   Write-Warning "The following installs were found:"
+   Write-Warning 'To prevent accidental data loss, this install will be aborted.'
+   Write-Warning 'The following installs were found:'
    $key | ForEach-Object {Write-Warning "- $($_.DisplayName)`t$($_.DisplayVersion)"}
-   Throw "Installation halted."
+   Throw 'Installation halted.'
 }
 
 $DownloadArgs = @{
@@ -84,18 +84,18 @@ if ($PackageParameters.NoUpdates) {
 if ($PackageParameters.EnableUpdateService) {
    Write-Host 'You requested to enable the auto-update service.' -ForegroundColor Cyan
    if ($MUIinstalled) {
-      if (Get-Service -Name "AdobeARMservice" -ErrorAction SilentlyContinue) {
-         $null = Set-Service -Name "AdobeARMservice" -StartupType Automatic
-         $null = Start-Service -Name "AdobeARMservice"
+      if (Get-Service -Name 'AdobeARMservice' -ErrorAction SilentlyContinue) {
+         $null = Set-Service -Name 'AdobeARMservice' -StartupType Automatic
+         $null = Start-Service -Name 'AdobeARMservice'
       } else {
          Write-Warning 'The Adobe ARM update service is not available and is not installed on updates.'
       }
    }
 } else {
    $options += ' DISABLE_ARM_SERVICE_INSTALL=1'
-   if (Get-Service -Name "AdobeARMservice" -ErrorAction SilentlyContinue) {
-      $null = Stop-Service -Name "AdobeARMservice" -Force
-      $null = Set-Service -Name "AdobeARMservice" -StartupType Disabled
+   if (Get-Service -Name 'AdobeARMservice' -ErrorAction SilentlyContinue) {
+      $null = Stop-Service -Name 'AdobeARMservice' -Force
+      $null = Set-Service -Name 'AdobeARMservice' -StartupType Disabled
    }
 }
 
@@ -142,6 +142,8 @@ if (-not $UpdateOnly) {
    
    if ($exitCode -eq 1603) {
       Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
+      Write-Warning 'The install log should provide more details about the encountered issue:'
+      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log"
       Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
    }
 }
@@ -168,6 +170,8 @@ if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
 
    if ($exitCode -eq 1603) {
       Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
+      Write-Warning 'The update log should provide more details about the encountered issue:'
+      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log"
       Throw "Patching of $env:ChocolateyPackageName to the latest version was unsuccessful."
    }
 }
