@@ -4,11 +4,11 @@
   <metadata>
     <!-- == PACKAGE SPECIFIC SECTION == -->
     <id>adobereader</id>
-    <version>2019.010.20064</version>
+    <version>2019.010.20064.01</version>
     <packageSourceUrl>https://github.com/itigoag/chocolatey.adobe-acrobat-reader-dc</packageSourceUrl>
     <owners>ITIGO AG, Simon Bärlocher</owners>
     <!-- == SOFTWARE SPECIFIC SECTION == -->
-    <title>Adobe Acrobat Reader DC (multi-lingual)</title>
+    <title>Adobe Acrobat Reader DC</title>
     <authors>Adobe</authors>
     <projectUrl>https://www.adobe.com/products/reader.html</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/itigoag/chocolatey.adobe-acrobat-reader-dc@c664e708a2c812f1da6cf3ef26f03fe56341dcc7/icon/adobe-acrobat-reader-dc.png</iconUrl>
