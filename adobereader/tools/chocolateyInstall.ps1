@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 
 $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
