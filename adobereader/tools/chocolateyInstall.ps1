@@ -4,8 +4,8 @@ $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
 $MUIurl            = 'http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020064/AcroRdrDC1901020064_MUI.exe'
 $MUIchecksum       = '81953f3cf426cbe9e6702d1af7f727c59514c012d8d90bacfb012079c7da6d23'
-$MUImspURL         = 'ftp://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020069/AcroRdrDCUpd1901020069_MUI.msp'
-$MUImspChecksum    = '4a73fb5f6bd8fefadb871404d2a668a4f466acbb34f536f2050b552aeb5840b8'
+$MUImspURL         = 'ftp://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020098/AcroRdrDCUpd1901020098_MUI.msp'
+$MUImspChecksum    = 'A07F67CF01DBF020A334DA177836841E6C287AE47F5193AF36471DA22DA187F0'
 
 $MUIinstalled = $false
 $UpdateOnly = $false
@@ -175,4 +175,3 @@ if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
       Throw "Patching of $env:ChocolateyPackageName to the latest version was unsuccessful."
    }
 }
-
