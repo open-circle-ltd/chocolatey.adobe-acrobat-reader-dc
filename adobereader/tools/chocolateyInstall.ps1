@@ -161,7 +161,7 @@ if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
    $mspPath = Get-ChocolateyWebFile @DownloadArgs
 
    $UpdateArgs = @{
-      Statements     = "/p $mspPath /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
+      Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
                            " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
       ExetoRun       = 'msiexec.exe'
       validExitCodes = @(0, 1603)
