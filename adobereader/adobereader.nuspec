@@ -4,7 +4,7 @@
   <metadata>
     <!-- == PACKAGE SPECIFIC SECTION == -->
     <id>adobereader</id>
-    <version>2019.010.20098</version>
+    <version>2019.010.20098.01</version>
     <packageSourceUrl>https://github.com/itigoag/chocolatey.adobe-acrobat-reader-dc</packageSourceUrl>
     <owners>ITIGO AG, Simon Bärlocher</owners>
     <!-- == SOFTWARE SPECIFIC SECTION == -->
