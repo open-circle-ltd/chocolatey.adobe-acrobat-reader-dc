@@ -155,7 +155,7 @@ if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
       FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
       url            = $MUImspURL
       checksum       = $MUImspChecksum
-      checksumType   = 'SHA256'
+      checksumType   = 'SHA512'
       GetOriginalFileName = $true
    }
    $mspPath = Get-ChocolateyWebFile @DownloadArgs
