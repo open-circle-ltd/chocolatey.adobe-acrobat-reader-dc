@@ -46,16 +46,6 @@ if ($key.Count -eq 1) {
    Throw 'Installation halted.'
 }
 
-$DownloadArgs = @{
-   packageName    = $env:ChocolateyPackageName
-   FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
-   url            = $MUIurl
-   checksum       = $MUIchecksum
-   checksumType   = 'SHA256'
-   GetOriginalFileName = $true
-}
-$MUIexePath = Get-ChocolateyWebFile @DownloadArgs
-
 
 $PackageParameters   = Get-PackageParameters
 # Reference: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/properties.html#command-line-example
@@ -128,38 +118,18 @@ if ((0..4) -contains $UpdateMode) {
    }
 }
 
-if (-not $UpdateOnly) {
-   $packageArgsEXE = @{
-      packageName    = "$env:ChocolateyPackageName (installer)"
-      fileType       = 'EXE'
-      File            = $MUIexePath
-      checksumType   = 'SHA256'
-      silentArgs     = "/sAll /msi /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
-                        " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
-      validExitCodes = @(0, 1000, 1101, 1603)
-   }
-   $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
-   
-   if ($exitCode -eq 1603) {
-      Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
-      Write-Warning 'The install log should provide more details about the encountered issue:'
-      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log"
-      Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
-   }
+
+$DownloadArgs = @{
+  packageName    = "$env:ChocolateyPackageName (update)"
+  FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
+  url            = $MUImspURL
+  checksum       = $MUImspChecksum
+  checksumType   = 'SHA512'
+  GetOriginalFileName = $true
 }
+$mspPath = Get-ChocolateyWebFile @DownloadArgs
 
-# Only download/install the patch if necessary
-if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
-   $DownloadArgs = @{
-      packageName    = "$env:ChocolateyPackageName (update)"
-      FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
-      url            = $MUImspURL
-      checksum       = $MUImspChecksum
-      checksumType   = 'SHA512'
-      GetOriginalFileName = $true
-   }
-   $mspPath = Get-ChocolateyWebFile @DownloadArgs
-
+if ($UpdateOnly){
    $UpdateArgs = @{
       Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
                            " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
@@ -173,5 +143,34 @@ if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
       Write-Warning 'The update log should provide more details about the encountered issue:'
       Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log"
       Throw "Patching of $env:ChocolateyPackageName to the latest version was unsuccessful."
+   }
+}
+else {
+   $DownloadArgs = @{
+      packageName    = $env:ChocolateyPackageName
+      FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
+      url            = $MUIurl
+      checksum       = $MUIchecksum
+      checksumType   = 'SHA256'
+      GetOriginalFileName = $true
+   }
+   $MUIexePath = Get-ChocolateyWebFile @DownloadArgs
+
+   $packageArgsEXE = @{
+      packageName    = "$env:ChocolateyPackageName (installer)"
+      fileType       = 'EXE'
+      File            = $MUIexePath
+      checksumType   = 'SHA256'
+      silentArgs     = "/sAll /msi /norestart /quiet PATCH=`"$mspPath`" ALLUSERS=1 EULA_ACCEPT=YES $options" +
+                        " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
+      validExitCodes = @(0, 1000, 1101, 1603)
+   }
+   $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
+
+   if ($exitCode -eq 1603) {
+      Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
+      Write-Warning 'The install log should provide more details about the encountered issue:'
+      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log"
+      Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
    }
 }
