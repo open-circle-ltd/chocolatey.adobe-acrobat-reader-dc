@@ -2,8 +2,8 @@ $ErrorActionPreference = 'Stop'
 
 $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
-$MUIurl            = 'http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020064/AcroRdrDC1901020064_MUI.exe'
-$MUIchecksum       = '81953f3cf426cbe9e6702d1af7f727c59514c012d8d90bacfb012079c7da6d23'
+$MUIurl            = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe'
+$MUIchecksum       = 'dfc4b3c70b7ecaeb40414c9d6591d8952131a5fffa0c0f5964324af7154f8111'
 $MUImspURL = 'http://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/1902120056/AcroRdrDCUpd1902120056_MUI.msp'
 $MUImspChecksum = '149c70260a30d7b1fe4d02504ff346b9abdf51f4d79c3ab082f82d35f468adca478f175d8582fa40380dced162df92e069af736ce0f5d015c93cd0815b0e98fc'
 

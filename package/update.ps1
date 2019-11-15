@@ -21,24 +21,9 @@ function global:au_GetLatest {
                   Where-Object {$_ -match '\d\.msp$'} |
                   Select-Object -First 1
 
-   # Find the most-recent EXE
-   $FTPpage = Invoke-WebRequest -Uri $FTPbase -UseBasicParsing -DisableKeepAlive
-   $Folders = $FTPpage.rawcontent -split '[\r\n]' | 
-                  Where-Object {$_ -match '>\d+<'} |
-                  ForEach-Object {$_ -replace '.*>(\d+)<.*','$1'} |
-                  Sort-Object -Descending
-   foreach ($folder in $Folders) {
-      $FolderFiles = Invoke-WebRequest -Uri "$FTPbase/$folder" -UseBasicParsing -DisableKeepAlive
-      $EXEstub = $FolderFiles.rawcontent -split '"' |
-                     Where-Object {$_ -match 'en_US\.exe$'} |
-                     Select-Object -First 1
-      if ($EXEstub) { break }
-   }
-   $MUIstub = $EXEstub -replace 'en_US','MUI'
-
    return  @{ 
        Version   = $version
-       URL32     = "http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/$MUIstub"
+       URL32     = "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe"
        MUIMSPurl = "$FTPbase/$MUIMSPstub"
    }
 }
