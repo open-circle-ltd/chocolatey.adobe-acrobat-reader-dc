@@ -2,17 +2,17 @@ $ErrorActionPreference = 'Stop'
 
 $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
-$MUIurl            = 'http://ardownload.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020064/AcroRdrDC1901020064_MUI.exe'
-$MUIchecksum       = '81953f3cf426cbe9e6702d1af7f727c59514c012d8d90bacfb012079c7da6d23'
-$MUImspURL = 'http://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/2000620034/AcroRdrDCUpd2000620034_MUI.msp'
+$MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020064/AcroRdrDC1901020064_MUI.exe'
+$MUIchecksum = '81953f3cf426cbe9e6702d1af7f727c59514c012d8d90bacfb012079c7da6d23'
+$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2000620034/AcroRdrDCUpd2000620034_MUI.msp'
 $MUImspChecksum = 'ca642357dcf301aa2cea65e9e307fe2b95cd673ec4852ecd4e28447fdcb0a6c65c8823f5581752d5f43c087b4b326a1b35f6ea665b2d5fac1db797115f0a0e6b'
 
 $MUIinstalled = $false
 $UpdateOnly = $false
-[array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' MUI','*')
+[array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' MUI', '*')
 
 if ($key.Count -eq 1) {
-   $InstalledVersion = $key[0].DisplayVersion.replace('.','')
+   $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
    $InstallerVersion = $MUIurl.split('/')[-2]
    if ($key[0].DisplayName -notmatch 'MUI') {
       if ($InstalledVersion -ge $InstallerVersion) {
@@ -20,44 +20,49 @@ if ($key.Count -eq 1) {
          Write-Warning 'This multi-language (MUI) package cannot overwrite it at this time.'
          Write-Warning "You will need to uninstall $($key[0].DisplayName) first."
          Throw 'Installation halted.'
-      } else {
+      }
+      else {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
          Write-Warning  'This package will replace it with the multi-language (MUI) release.'
       }
-   } else {
+   }
+   else {
       $MUIinstalled = $true
       $UpdaterVersion = $MUImspURL.split('/')[-2]
       if ($InstalledVersion -eq $UpdaterVersion) {
          Write-Verbose 'Currently installed version is the same as this package.  Nothing further to do.'
          Return
-      } elseif ($InstalledVersion -gt $UpdaterVersion) {
+      }
+      elseif ($InstalledVersion -gt $UpdaterVersion) {
          Write-Warning "$($key[0].DisplayName) v20$($key[0].DisplayVersion) installed."
          Write-Warning "This package installs v$env:ChocolateyPackageVersion and cannot replace a newer version."
          Throw 'Installation halted.'
-      } elseif (($InstalledVersion -ge $InstallerVersion) -and ($InstalledVersion -lt $UpdaterVersion)) {
+      }
+      elseif (($InstalledVersion -ge $InstallerVersion) -and ($InstalledVersion -lt $UpdaterVersion)) {
          $UpdateOnly = $true
       }
    }
-} elseif ($key.count -gt 1) {
+}
+elseif ($key.count -gt 1) {
    Write-Warning "$($key.Count) matching installs of Adobe Acrobat Reader DC found!"
    Write-Warning 'To prevent accidental data loss, this install will be aborted.'
    Write-Warning 'The following installs were found:'
-   $key | ForEach-Object {Write-Warning "- $($_.DisplayName)`t$($_.DisplayVersion)"}
+   $key | ForEach-Object { Write-Warning "- $($_.DisplayName)`t$($_.DisplayVersion)" }
    Throw 'Installation halted.'
 }
 
 $DownloadArgs = @{
-   packageName    = $env:ChocolateyPackageName
-   FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
-   url            = $MUIurl
-   checksum       = $MUIchecksum
-   checksumType   = 'SHA256'
+   packageName         = $env:ChocolateyPackageName
+   FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
+   url                 = $MUIurl
+   checksum            = $MUIchecksum
+   checksumType        = 'SHA256'
    GetOriginalFileName = $true
 }
 $MUIexePath = Get-ChocolateyWebFile @DownloadArgs
 
 
-$PackageParameters   = Get-PackageParameters
+$PackageParameters = Get-PackageParameters
 # Reference: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/properties.html#command-line-example
 $options = ' DISABLEDESKTOPSHORTCUT=1'
 if ($PackageParameters.DesktopIcon) {
@@ -68,7 +73,7 @@ if ($PackageParameters.DesktopIcon) {
 if ($PackageParameters.NoUpdates) {
    $RegRoot = 'HKLM:\SOFTWARE\Policies'
    $RegSubFolders = ('Adobe\Acrobat Reader\DC\FeatureLockDown').split('\')
-   for ($i=0; $i -lt $RegSubFolders.count; $i++) {
+   for ($i = 0; $i -lt $RegSubFolders.count; $i++) {
       $RegPath = "$RegRoot\$($RegSubFolders[0..$i] -join '\')"
       if (-not (Test-Path $RegPath)) {
          $null = New-Item -Path $RegPath.TrimEnd($RegSubFolders[$i]) -Name $RegSubFolders[$i]
@@ -87,11 +92,13 @@ if ($PackageParameters.EnableUpdateService) {
       if (Get-Service -Name 'AdobeARMservice' -ErrorAction SilentlyContinue) {
          $null = Set-Service -Name 'AdobeARMservice' -StartupType Automatic
          $null = Start-Service -Name 'AdobeARMservice'
-      } else {
+      }
+      else {
          Write-Warning 'The Adobe ARM update service is not available and is not installed on updates.'
       }
    }
-} else {
+}
+else {
    $options += ' DISABLE_ARM_SERVICE_INSTALL=1'
    if (Get-Service -Name 'AdobeARMservice' -ErrorAction SilentlyContinue) {
       $null = Stop-Service -Name 'AdobeARMservice' -Force
@@ -101,7 +108,8 @@ if ($PackageParameters.EnableUpdateService) {
 
 if (-not $PackageParameters.UpdateMode) {
    $UpdateMode = 0
-} else {$UpdateMode = $PackageParameters.UpdateMode}
+}
+else { $UpdateMode = $PackageParameters.UpdateMode }
 
 if ((0..4) -contains $UpdateMode) {
    Switch ($UpdateMode) {
@@ -123,7 +131,8 @@ if ((0..4) -contains $UpdateMode) {
       if (Test-Path $RegPath2) {
          $null = New-ItemProperty -Path $RegPath2 -Name 'Mode' -Value $UpdateMode -force
       }
-   } else {
+   }
+   else {
       $options += " UPDATE_MODE=$UpdateMode"
    }
 }
@@ -132,10 +141,10 @@ if (-not $UpdateOnly) {
    $packageArgsEXE = @{
       packageName    = "$env:ChocolateyPackageName (installer)"
       fileType       = 'EXE'
-      File            = $MUIexePath
+      File           = $MUIexePath
       checksumType   = 'SHA256'
       silentArgs     = "/sAll /msi /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
-                        " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
+      " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
       validExitCodes = @(0, 1000, 1101, 1603)
    }
    $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
@@ -151,18 +160,18 @@ if (-not $UpdateOnly) {
 # Only download/install the patch if necessary
 if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
    $DownloadArgs = @{
-      packageName    = "$env:ChocolateyPackageName (update)"
-      FileFullPath   = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
-      url            = $MUImspURL
-      checksum       = $MUImspChecksum
-      checksumType   = 'SHA512'
+      packageName         = "$env:ChocolateyPackageName (update)"
+      FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
+      url                 = $MUImspURL
+      checksum            = $MUImspChecksum
+      checksumType        = 'SHA512'
       GetOriginalFileName = $true
    }
    $mspPath = Get-ChocolateyWebFile @DownloadArgs
 
    $UpdateArgs = @{
       Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
-                           " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
+      " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
       ExetoRun       = 'msiexec.exe'
       validExitCodes = @(0, 1603)
    }

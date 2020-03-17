@@ -12,7 +12,7 @@ version: "{{ register_changelog.content |
   }}"
 
 # Download URL
-url: "http://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCUpd{{ version | regex_replace('\\.', '') }}_MUI.msp"
+url: "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCUpd{{ version | regex_replace('\\.', '') }}_MUI.msp"
 
 searchreplace:
   'tools/chocolateyinstall.ps1':
