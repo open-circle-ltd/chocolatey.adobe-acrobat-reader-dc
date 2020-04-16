@@ -11,9 +11,14 @@ $MUIinstalled = $false
 $UpdateOnly = $false
 [array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' MUI', '*')
 
+$MUIurl -match 'AcroRdrDC(\d+)_'
+$InstallerVersion = $Matches[1]
+
+$MUImspURL -match 'AcroRdrDCUpd(\d+)_'
+$UpdaterVersion = $Matches[1]
+
 if ($key.Count -eq 1) {
    $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
-   $InstallerVersion = $MUIurl.split('/')[-2]
    if ($key[0].DisplayName -notmatch 'MUI') {
       if ($InstalledVersion -ge $InstallerVersion) {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
@@ -28,7 +33,6 @@ if ($key.Count -eq 1) {
    }
    else {
       $MUIinstalled = $true
-      $UpdaterVersion = $MUImspURL.split('/')[-2]
       if ($InstalledVersion -eq $UpdaterVersion) {
          Write-Verbose 'Currently installed version is the same as this package.  Nothing further to do.'
          Return
@@ -158,7 +162,7 @@ if (-not $UpdateOnly) {
 }
 
 # Only download/install the patch if necessary
-if ($MUIurl.split('/')[-2] -ne $MUImspURL.split('/')[-2]) {
+if ($InstallerVersion -ne $UpdaterVersion) {
    $DownloadArgs = @{
       packageName         = "$env:ChocolateyPackageName (update)"
       FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
