@@ -70,7 +70,7 @@ $PackageParameters = Get-PackageParameters
 # Reference: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/properties.html#command-line-example
 $options = ' DISABLEDESKTOPSHORTCUT=1'
 if ($PackageParameters.DesktopIcon) {
-   $options += ''
+   $options = ''
    Write-Host 'You requested a desktop icon.' -ForegroundColor Cyan
 }
 
