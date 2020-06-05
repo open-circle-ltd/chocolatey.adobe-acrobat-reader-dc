@@ -64,6 +64,7 @@ For example :
     </dependencies>
   </metadata>
   <files>
-    <file src="tools/**" target="tools"/>
+    <file src="tools/chocolateyinstall.ps1" target="tools"/>
+    <file src="tools/chocolateyuninstall.ps1" target="tools"/>
   </files>
 </package>
