@@ -3,7 +3,7 @@
   <metadata>
     <!-- == PACKAGE SPECIFIC SECTION == -->
     <id>adobereader</id>
-    <version>2020.012.20048</version>
+    <version>2020.013.20064</version>
     <packageSourceUrl>https://github.com/itigoag/chocolatey.adobe-acrobat-reader-dc</packageSourceUrl>
     <owners>ITIGO AG, Simon Bärlocher</owners>
     <!-- == SOFTWARE SPECIFIC SECTION == -->
