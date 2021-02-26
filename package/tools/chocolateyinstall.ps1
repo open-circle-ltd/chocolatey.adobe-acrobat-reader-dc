@@ -4,8 +4,8 @@ $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
 $MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020064/AcroRdrDC1901020064_MUI.exe'
 $MUIchecksum = '81953f3cf426cbe9e6702d1af7f727c59514c012d8d90bacfb012079c7da6d23'
-$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2100120140/AcroRdrDCUpd2100120140_MUI.msp'
-$MUImspChecksum = 'cc42e3eb16f2e469485cf1797ea23ea4f02020b17af9ddb584f1d71b460207ac0d857c2370aa8d2b2daa3374e8ed7eee6195a33117e0038ed4d7a7f4fd8e79cc'
+$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2100120142/AcroRdrDCUpd2100120142_MUI.msp'
+$MUImspChecksum = '50085c35fcfb7303f35cedd58ceb5bbc0c79634583a2aa01b852dc81c724fe063cb452fd73b82d33b91a571c344a2b1efd3f81bf9ae455c99cdd5738580e52dd'
 
 $MUIinstalled = $false
 $UpdateOnly = $false
