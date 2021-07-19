@@ -2,10 +2,10 @@
 # chocomilk vars
 
 # Package Changelog
-changelog: 'https://helpx.adobe.com/acrobat/release-note/release-notes-acrobat-reader.html'
+changelog: "https://helpx.adobe.com/acrobat/release-note/release-notes-acrobat-reader.html"
 
 # Regex for Version
-versions_prefix: '20'
+versions_prefix: "20"
 version: "{{ register_changelog.content |
   regex_search('DC.*\\([0-9.]+\\)') |
   regex_search('\\d+.\\d+.\\d+\\b')
@@ -15,7 +15,7 @@ version: "{{ register_changelog.content |
 url: "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCUpd{{ version | regex_replace('\\.', '') }}_MUI.msp"
 
 searchreplace:
-  'tools/chocolateyinstall.ps1':
+  "tools/chocolateyinstall.ps1":
     - regwxp: (^\s*[$]*MUImspURL\s*=\s*)('.*')
       replace: "$MUImspURL = '{{ url }}'"
     - regwxp: (^\s*[$]*MUImspChecksum\s*=\s*)('.*')
@@ -31,20 +31,20 @@ readme:
 # deploy
 deploy:
   - provider: chocolatey
-    repository: 'https://nuget.itigo.tech/upload'
+    repository: "https://nuget.itigo.tech/upload"
     key: "{{ lookup('env','CHOCOLATEY_ITIGO_API_KEY') }}"
   - provider: chocolatey
-    repository: 'https://push.chocolatey.org/'
+    repository: "https://push.chocolatey.org/"
     key: "{{ lookup('env','CHOCOLATEY_ORG_API_KEY') }}"
   - provider: github
-    name: 'itigo-bot'
-    email: 'chocomilk@itigo.ch'
-    url: github.com/itigoag/chocolatey.adobe-acrobat-reader-dc.git
+    name: "OCC-Automation"
+    email: "chocomilk@itigo.ch"
+    url: github.com/open-circle-ltd/chocolatey.adobe-acrobat-reader-dc.git
     key: "{{ lookup('env','GITHUB_API_KEY') }}"
 
 # Notification
 notifications:
   - provider: mattermost
-    url: 'https://matters.itigo.tech'
+    url: "https://chat.open-circle.ch/"
     key: "{{ lookup('env','MATTERMOST_API_KEY') }}"
-    channel: 'software-packages'
+    channel: "notification-chocolaty"

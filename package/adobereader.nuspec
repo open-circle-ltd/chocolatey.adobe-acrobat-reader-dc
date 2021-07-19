@@ -4,13 +4,13 @@
     <!-- == PACKAGE SPECIFIC SECTION == -->
     <id>adobereader</id>
     <version>2021.005.20048</version>
-    <packageSourceUrl>https://github.com/itigoag/chocolatey.adobe-acrobat-reader-dc</packageSourceUrl>
-    <owners>ITIGO AG, Simon Bärlocher</owners>
+    <packageSourceUrl>https://github.com/open-circle-ltd/chocolatey.adobe-acrobat-reader-dc</packageSourceUrl>
+    <owners>Open Circle AG, Simon Bärlocher</owners>
     <!-- == SOFTWARE SPECIFIC SECTION == -->
     <title>Adobe Acrobat Reader DC</title>
     <authors>Adobe</authors>
     <projectUrl>https://www.adobe.com/products/reader.html</projectUrl>
-    <iconUrl>https://cdn.jsdelivr.net/gh/itigoag/chocolatey.adobe-acrobat-reader-dc@c664e708a2c812f1da6cf3ef26f03fe56341dcc7/icon/adobe-acrobat-reader-dc.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/open-circle-ltd/chocolatey.adobe-acrobat-reader-dc@c664e708a2c812f1da6cf3ef26f03fe56341dcc7/icon/adobe-acrobat-reader-dc.png</iconUrl>
     <copyright>Copyright © 1984-2018 Adobe Systems Incorporated and its licensors</copyright>
     <licenseUrl>http://www.adobe.com/products/eulas/pdfs/Reader10_combined-20100625_1419.pdf</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
