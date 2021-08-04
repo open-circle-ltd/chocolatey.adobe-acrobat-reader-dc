@@ -33,7 +33,7 @@ jobs:
           PWD: .
 
       - name: Play Ansible Playbook
-        run: ansible-playbook -i chocomilk/inventory/hosts.yml chocomilk/play.yml
+        run: ansible-playbook -i chocomilk/inventory/hosts.yml -vvvv chocomilk/play.yml
         env:
           ANSIBLE_HOST_KEY_CHECKING: "false"
           ANSIBLE_DEPRECATION_WARNINGS: "false"
