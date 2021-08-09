@@ -2,8 +2,8 @@ $ErrorActionPreference = 'Stop'
 
 $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
-$MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1901020064/AcroRdrDC1901020064_MUI.exe'
-$MUIchecksum = '81953f3cf426cbe9e6702d1af7f727c59514c012d8d90bacfb012079c7da6d23'
+$MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe'
+$MUIchecksum = 'dfc4b3c70b7ecaeb40414c9d6591d8952131a5fffa0c0f5964324af7154f8111'
 $MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2100520058/AcroRdrDCUpd2100520058_MUI.msp'
 $MUImspChecksum = '03ccd930b7207318ef5b403b9466b50c9a8a974430497ef7593347c7b482dd02ce099dac5014040c335d36635b6518b25e9670041f5fea2b7d978ad1dfe373d5'
 
@@ -11,25 +11,14 @@ $MUIinstalled = $false
 $UpdateOnly = $false
 [array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' MUI', '*')
 
-$MUIurl -match 'AcroRdrDC(\d+)_'
-$InstallerVersion = $Matches[1]
-
 $MUImspURL -match 'AcroRdrDCUpd(\d+)_'
 $UpdaterVersion = $Matches[1]
 
 if ($key.Count -eq 1) {
    $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
    if ($key[0].DisplayName -notmatch 'MUI') {
-      if ($InstalledVersion -ge $InstallerVersion) {
-         Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
-         Write-Warning 'This multi-language (MUI) package cannot overwrite it at this time.'
-         Write-Warning "You will need to uninstall $($key[0].DisplayName) first."
-         Throw 'Installation halted.'
-      }
-      else {
-         Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
-         Write-Warning  'This package will replace it with the multi-language (MUI) release.'
-      }
+       Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
+       Write-Warning  'This package will replace it with the multi-language (MUI) release.'
    }
    else {
       $MUIinstalled = $true
@@ -42,7 +31,7 @@ if ($key.Count -eq 1) {
          Write-Warning "This package installs v$env:ChocolateyPackageVersion and cannot replace a newer version."
          Throw 'Installation halted.'
       }
-      elseif (($InstalledVersion -ge $InstallerVersion) -and ($InstalledVersion -lt $UpdaterVersion)) {
+      else {
          $UpdateOnly = $true
       }
    }
@@ -54,16 +43,6 @@ elseif ($key.count -gt 1) {
    $key | ForEach-Object { Write-Warning "- $($_.DisplayName)`t$($_.DisplayVersion)" }
    Throw 'Installation halted.'
 }
-
-$DownloadArgs = @{
-   packageName         = $env:ChocolateyPackageName
-   FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
-   url                 = $MUIurl
-   checksum            = $MUIchecksum
-   checksumType        = 'SHA256'
-   GetOriginalFileName = $true
-}
-$MUIexePath = Get-ChocolateyWebFile @DownloadArgs
 
 
 $PackageParameters = Get-PackageParameters
@@ -141,38 +120,17 @@ if ((0..4) -contains $UpdateMode) {
    }
 }
 
-if (-not $UpdateOnly) {
-   $packageArgsEXE = @{
-      packageName    = "$env:ChocolateyPackageName (installer)"
-      fileType       = 'EXE'
-      File           = $MUIexePath
-      checksumType   = 'SHA256'
-      silentArgs     = "/sAll /msi /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
-      " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
-      validExitCodes = @(0, 1000, 1101, 1603)
-   }
-   $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
-   
-   if ($exitCode -eq 1603) {
-      Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
-      Write-Warning 'The install log should provide more details about the encountered issue:'
-      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log"
-      Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
-   }
+$DownloadArgs = @{
+   packageName         = "$env:ChocolateyPackageName (update)"
+   FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
+   url                 = $MUImspURL
+   checksum            = $MUImspChecksum
+   checksumType        = 'SHA512'
+   GetOriginalFileName = $true
 }
+$mspPath = Get-ChocolateyWebFile @DownloadArgs
 
-# Only download/install the patch if necessary
-if ($InstallerVersion -ne $UpdaterVersion) {
-   $DownloadArgs = @{
-      packageName         = "$env:ChocolateyPackageName (update)"
-      FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
-      url                 = $MUImspURL
-      checksum            = $MUImspChecksum
-      checksumType        = 'SHA512'
-      GetOriginalFileName = $true
-   }
-   $mspPath = Get-ChocolateyWebFile @DownloadArgs
-
+if ($UpdateOnly) {
    $UpdateArgs = @{
       Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
       " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
@@ -186,5 +144,34 @@ if ($InstallerVersion -ne $UpdaterVersion) {
       Write-Warning 'The update log should provide more details about the encountered issue:'
       Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log"
       Throw "Patching of $env:ChocolateyPackageName to the latest version was unsuccessful."
+   }
+}
+else {
+   $DownloadArgs = @{
+      packageName         = $env:ChocolateyPackageName
+      FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
+      url                 = $MUIurl
+      checksum            = $MUIchecksum
+      checksumType        = 'SHA256'
+      GetOriginalFileName = $true
+   }
+   $MUIexePath = Get-ChocolateyWebFile @DownloadArgs
+
+   $packageArgsEXE = @{
+      packageName    = "$env:ChocolateyPackageName (installer)"
+      fileType       = 'EXE'
+      File           = $MUIexePath
+      checksumType   = 'SHA256'
+      silentArgs     = "/sAll /msi /norestart /quiet PATCH=`"$mspPath`" ALLUSERS=1 EULA_ACCEPT=YES $options" +
+      " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
+      validExitCodes = @(0, 1000, 1101, 1603)
+   }
+   $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
+   
+   if ($exitCode -eq 1603) {
+      Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
+      Write-Warning 'The install log should provide more details about the encountered issue:'
+      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log"
+      Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
    }
 }
