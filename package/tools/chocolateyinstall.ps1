@@ -17,8 +17,16 @@ $UpdaterVersion = $Matches[1]
 if ($key.Count -eq 1) {
    $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
    if ($key[0].DisplayName -notmatch 'MUI') {
-       Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
-       Write-Warning  'This package will replace it with the multi-language (MUI) release.'
+      if ($InstalledVersion -ge $UpdaterVersion) {
+         Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
+         Write-Warning 'This multi-language (MUI) package cannot overwrite it at this time.'
+         Write-Warning "You will need to uninstall $($key[0].DisplayName) first."
+         Throw 'Installation halted.'
+      }
+      else {
+         Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
+         Write-Warning  'This package will replace it with the multi-language (MUI) release.'
+      }
    }
    else {
       $MUIinstalled = $true
