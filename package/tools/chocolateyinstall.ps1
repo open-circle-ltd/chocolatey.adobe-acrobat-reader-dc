@@ -183,3 +183,7 @@ else {
       Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
    }
 }
+
+if ($PackageParameters.NoUpdates -or $UpdateMode -lt 2) {
+   Unregister-ScheduledTask 'Adobe Acrobat Update Task' -Confirm:$false -ErrorAction SilentlyContinue
+}
