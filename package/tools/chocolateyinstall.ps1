@@ -14,14 +14,19 @@ $UpdateOnly = $false
 $MUImspURL -match 'AcroRdrDCUpd(\d+)_'
 $UpdaterVersion = $Matches[1]
 
+$PackageParameters = Get-PackageParameters
+
 if ($key.Count -eq 1) {
    $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
    if ($key[0].DisplayName -notmatch 'MUI') {
-      if ($InstalledVersion -ge $UpdaterVersion) {
+      if (($InstalledVersion -ge $UpdaterVersion) -and !($PackageParameters.OverwriteInstallation)) {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
-         Write-Warning 'This multi-language (MUI) package cannot overwrite it at this time.'
-         Write-Warning "You will need to uninstall $($key[0].DisplayName) first."
+         Write-Warning "You will need to uninstall $($key[0].DisplayName) first or use /OverwriteInstallation."
          Throw 'Installation halted.'
+      }
+      elseif (($InstalledVersion -ge $UpdaterVersion) -and $PackageParameters.OverwriteInstallation) {
+         Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
+         Write-Warning  'This package will replace it with the multi-language (MUI) release (Installation overwrite).'
       }
       else {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
@@ -52,8 +57,33 @@ elseif ($key.count -gt 1) {
    Throw 'Installation halted.'
 }
 
+if ($PackageParameters.OverwriteInstallation) {
+   Write-Host 'Uninstalling single language version.'
+   $UninstallRegKey = [array](Get-UninstallRegistryKey "Adobe Acrobat Reader DC*")[0].UninstallString.split("/I")[2]
+   $MSIArgs = @(
+      "/x"
+      '"{0}"' 
+      "/qn"
+   ) -f $UninstallRegKey
+   Start-Process "msiexec.exe" -ArgumentList $MSIArgs -Wait
+   $Uninstalled = $?
+   $RegPath = 'HKLM:\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown'
 
-$PackageParameters = Get-PackageParameters
+   if (Test-Path $RegPath) {
+      $key = Get-ItemProperty -path $RegPath
+      if ($key.bUpdater -ne $null) {
+         $null = Remove-ItemProperty -Path $RegPath -Name 'bUpdater' -Force
+      }
+   }
+
+   if ($Uninstalled) {
+      Write-Host "Successfully uninstalled existing Adobe Acrobat Reader."
+   }
+   else {
+      Throw "Failed to uninstall existing version of Adobe Acrobat Reader."
+   }
+}
+
 # Reference: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/properties.html#command-line-example
 $options = ' DISABLEDESKTOPSHORTCUT=1'
 if ($PackageParameters.DesktopIcon) {
