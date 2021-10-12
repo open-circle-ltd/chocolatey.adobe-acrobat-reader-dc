@@ -6,7 +6,7 @@
 
 Adobe Acrobat Reader DC software is the free, trusted global standard for viewing, printing, signing, sharing, and annotating PDFs. It's the only PDF viewer that can open and interact with all types of PDF content – including forms and multimedia. And now, it’s connected to Adobe Document Cloud – so you can work with PDFs on computers and mobile devices.
 
-This package installs/upgrades the Multi-lingual ("MUI") release. In some cases, this package will be able to install over the top of a language-specific installation. Otherwise, this package will exit and require a manual uninstall of the language specific installation.
+This package installs/upgrades the Multi-lingual ("MUI") release. In some cases, this package will by default be able to install over the top of a language-specific installation. Otherwise, this package will exit and require either a manual uninstall of the language specific installation or having the parameter '/OverwriteInstallation' set to do this automatically.
 
 ## Note
 
@@ -18,6 +18,7 @@ By default, **installation** of this package:
 
 - Will _NOT_ install a desktop icon.
 - Will _NOT_ install the Adobe Reader and Acrobat Manager ("ARM") service.
+- Will _NOT_ uninstall language-specific installations.
 - Will configure Reader to only **check for updates manually** with confirmation for install.
 
 However, **upgrades** to Adobe Reader via this package:
@@ -31,6 +32,7 @@ However, **upgrades** to Adobe Reader via this package:
 
 - `/DesktopIcon` - The Desktop icon will be installed to the common desktop. (Install only.)
 - `/NoUpdates` - No updates via internal mechanisms (including manual checks). Only downloading from Adobe and running installers or updates (or updating this package) will advance the version of Reader. Once set, only uninstalling this package will remove this update block.
+- `/OverwriteInstallation` - Uninstall a language-specific installation before installing the Multi-lingual ("MUI") release. _Be aware that this will remove all data and features of an existing installation!_
 - `/EnableUpdateService` - Install the AdobeARM service. (Does not override `/NoUpdates`.)
 - `/UpdateMode:#` - Sets the update mode (below). (Does not override `/NoUpdates`.)
 
