@@ -47,4 +47,4 @@ notifications:
   - provider: mattermost
     url: "https://chat.open-circle.ch/"
     key: "{{ lookup('env','MATTERMOST_API_KEY') }}"
-    channel: "notification-chocolaty"
+    channel: "notification-chocolatey"
