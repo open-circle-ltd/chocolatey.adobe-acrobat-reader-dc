@@ -6,35 +6,14 @@ on:
     - cron: "0 13 * * *"
 
 jobs:
-  update:
+  chocomilk:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout chocomilk
-        uses: actions/checkout@v2
-        with:
-          repository: itigoag/chocomilk.git
-          path: chocomilk
-          ref: "master"
-
       - uses: actions/checkout@v2
-        with:
-          path: package
 
-      - uses: actions/setup-python@v1
-
-      - name: Play Ansible Playbook before
-        run: ansible-playbook -i chocomilk/inventory/hosts.yml chocomilk/before.yml
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: "false"
-          ANSIBLE_DEPRECATION_WARNINGS: "false"
-          CHOCOLATEY_ITIGO_API_KEY: ${{ secrets.CHOCOLATEY_ITIGO_API_KEY }}
-          MATTERMOST_API_KEY: ${{ secrets.MATTERMOST_API_KEY }}
-          GITHUB_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-          PWD: .
-
-      - name: Play Ansible Playbook
-        run: ansible-playbook -i chocomilk/inventory/hosts.yml -vvvv chocomilk/play.yml
+      - name: Play chocomilk
+        uses: open-circle-ltd/chocomilk@master
         env:
           ANSIBLE_HOST_KEY_CHECKING: "false"
           ANSIBLE_DEPRECATION_WARNINGS: "false"
@@ -42,4 +21,4 @@ jobs:
           CHOCOLATEY_ORG_API_KEY: ${{ secrets.CHOCOLATEY_ORG_API_KEY }}
           MATTERMOST_API_KEY: ${{ secrets.MATTERMOST_API_KEY }}
           GITHUB_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-          PWD: .
+          PWD: ${{ github.workspace }}
