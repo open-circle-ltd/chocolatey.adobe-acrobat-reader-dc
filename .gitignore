@@ -18,4 +18,8 @@
 # Exclude packaged modules
 *.nupkg
 
+### Executable ###
+*.exe
+*.msi
+
 # End of https://www.gitignore.io/api/powershell,visualstudiocode,chocolatey

@@ -4,8 +4,8 @@ $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
 $MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe'
 $MUIchecksum = 'dfc4b3c70b7ecaeb40414c9d6591d8952131a5fffa0c0f5964324af7154f8111'
-$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2200120117/AcroRdrDCUpd2200120117_MUI.msp'
-$MUImspChecksum = '5E16BFD1496515068EA6FEA0849AEA24B92C894E22A9D6D2B69B22A45DB578AED1905955C390A0DF41361412B4C5004F36E97121A827F388EBE1DC7D3656CC96'
+$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2200220191/AcroRdrDCUpd2200220191_MUI.msp'
+$MUImspChecksum = 'b8d036ae4b42301bcc746d15258422044d9ba00a3717da6f3aa70bbb9943972a711224202c7cccdf7ebb8b129e1c8c2a6b0403ff09b5b725ac722b3f4e53e401'
 
 $MUIinstalled = $false
 $UpdateOnly = $false
@@ -62,7 +62,7 @@ if ($PackageParameters.OverwriteInstallation) {
    $UninstallRegKey = [array](Get-UninstallRegistryKey "Adobe Acrobat Reader DC*")[0].UninstallString.split("/I")[2]
    $MSIArgs = @(
       "/x"
-      '"{0}"' 
+      '"{0}"'
       "/qn"
    ) -f $UninstallRegKey
    Start-Process "msiexec.exe" -ArgumentList $MSIArgs -Wait
@@ -205,7 +205,7 @@ else {
       validExitCodes = @(0, 1000, 1101, 1603)
    }
    $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
-   
+
    if ($exitCode -eq 1603) {
       Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
       Write-Warning 'The install log should provide more details about the encountered issue:'
