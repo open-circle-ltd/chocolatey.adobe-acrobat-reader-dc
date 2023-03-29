@@ -13,15 +13,18 @@ version: "{{ register_changelog.content |
 
 # Download URL
 url: "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCUpd{{ version | regex_replace('\\.', '') }}_MUI.msp"
+url64: "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCx64UUpd{{ version | regex_replace('\\.', '') }}_MUI.msp"
 
 searchreplace:
   "tools/chocolateyinstall.ps1":
     - regwxp: (^\s*[$]*MUImspURL\s*=\s*)('.*')
       replace: "$MUImspURL = '{{ url }}'"
+    - regwxp: (^\s*[$]*MUImspURL64\s*=\s*)('.*')
+      replace: "$MUImspURL64 = '{{ url64 }}'"
     - regwxp: (^\s*[$]*MUImspChecksum\s*=\s*)('.*')
       replace: "$MUImspChecksum = '{{ file_hash }}'"
-    - regwxp: (^\s*[$]*checksumPackage64\s*=\s*)('.*')
-      replace: '$checksumPackage64 = "{{ file64_hash  | default() }}"'
+    - regwxp: (^\s*[$]*MUImspChecksum64\s*=\s*)('.*')
+      replace: '$MUImspChecksum64 = "{{ file64_hash  | default() }}"'
 
 # readme to description
 readme:

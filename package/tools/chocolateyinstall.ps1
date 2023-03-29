@@ -3,9 +3,13 @@ $ErrorActionPreference = 'Stop'
 $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
 $MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe'
+$MUIurl64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2200320258/AcroRdrDCx642200320258_MUI.exe'
 $MUIchecksum = 'dfc4b3c70b7ecaeb40414c9d6591d8952131a5fffa0c0f5964324af7154f8111'
+$MUIchecksum64 = 'c66f8d46d00fc1e61d55538285b655d30e8d422549ba2d6ce29129521a6ea100'
 $MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300120093/AcroRdrDCUpd2300120093_MUI.msp'
+$MUImspURL64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300120093/AcroRdrDCx64Upd2300120093_MUI.msp'
 $MUImspChecksum = 'cd7153affcdb2a9fe3348b56e0d61b6025c60c5f86bdc142982269c7b61e169c5a04ad548e7e018c5c977f252a44c870f09c7951b8ae9fc54e24278eda2489a4'
+$MUImspChecksum64 = 'dd0df80d43462308a38ca092fe48eb60a543809005e7dbeeef8ce152ac61a4c558bf7bd47e6c13ea3c95f8e13fdab540b89ce08fdac6db3e672d9b98dfdc5ce4'
 
 $MUIinstalled = $false
 $UpdateOnly = $false
@@ -162,7 +166,9 @@ $DownloadArgs = @{
    packageName         = "$env:ChocolateyPackageName (update)"
    FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.msp"
    url                 = $MUImspURL
+   url64bit            = $MUImspURL64
    checksum            = $MUImspChecksum
+   checksum64          = $MUImspChecksum64
    checksumType        = 'SHA512'
    GetOriginalFileName = $true
 }
@@ -189,7 +195,9 @@ else {
       packageName         = $env:ChocolateyPackageName
       FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
       url                 = $MUIurl
+      url64bit            = $MUIurl64
       checksum            = $MUIchecksum
+      checksumType64      = $MUIchecksum64
       checksumType        = 'SHA256'
       GetOriginalFileName = $true
    }
