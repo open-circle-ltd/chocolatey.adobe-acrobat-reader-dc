@@ -13,7 +13,7 @@ version: "{{ register_changelog.content |
 
 # Download URL
 url: "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCUpd{{ version | regex_replace('\\.', '') }}_MUI.msp"
-url64: "https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCx64Upd{{ version | regex_replace('\\.', '') }}_MUI.msp"
+url64: "https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/{{ version |  regex_replace('\\.', '') }}/AcroRdrDCx64Upd{{ version | regex_replace('\\.', '') }}_MUI.msp"
 
 searchreplace:
   "tools/chocolateyinstall.ps1":
