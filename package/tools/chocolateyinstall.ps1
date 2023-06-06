@@ -6,9 +6,9 @@ $MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/15007200
 $MUIurl64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300120093/AcroRdrDCx642300120093_MUI.exe'
 $MUIchecksum = 'dfc4b3c70b7ecaeb40414c9d6591d8952131a5fffa0c0f5964324af7154f8111'
 $MUIchecksum64 = '69a3b05f4b90445024963af79b37520f26b289a8979894a5c9d8ef9c290c2ee4'
-$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300120143/AcroRdrDCUpd2300120143_MUI.msp'
-$MUImspURL64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300120143/AcroRdrDCx64Upd2300120143_MUI.msp'
-$MUImspChecksum = 'afeb9edc1dae2c225d9806d0e51125f76981739915b33271cdc55147e3a7a981703004aa232020b9f0ea5c6eb0955a63a05bd6ebff460ad43ee2b9a68c0dc1c7'
+$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300320201/AcroRdrDCUpd2300320201_MUI.msp'
+$MUImspURL64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300320201/AcroRdrDCx64Upd2300320201_MUI.msp'
+$MUImspChecksum = '0b42a8d5fcabc10b7badac93a9ab1095efa375d6dfa74c9bb9ee40fbb1cd7d919498551c4bae16373e9ea8bcf16085abf8c4b1cdd19c3baf503df15aa8568a0e'
 $MUImspChecksum64 = "2cbf05ce6526c617c77ae30c5720485cdf0596d1fb3f5941c541d384ec94722b34942b2a5d2c95cd5d4c318a784e631be40eb948954c5700a4110f30b937cc7b"
 
 $MUIinstalled = $false
