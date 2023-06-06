@@ -9,7 +9,7 @@ $MUIchecksum64 = '69a3b05f4b90445024963af79b37520f26b289a8979894a5c9d8ef9c290c2e
 $MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300320201/AcroRdrDCUpd2300320201_MUI.msp'
 $MUImspURL64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300320201/AcroRdrDCx64Upd2300320201_MUI.msp'
 $MUImspChecksum = '0b42a8d5fcabc10b7badac93a9ab1095efa375d6dfa74c9bb9ee40fbb1cd7d919498551c4bae16373e9ea8bcf16085abf8c4b1cdd19c3baf503df15aa8568a0e'
-$MUImspChecksum64 = "2cbf05ce6526c617c77ae30c5720485cdf0596d1fb3f5941c541d384ec94722b34942b2a5d2c95cd5d4c318a784e631be40eb948954c5700a4110f30b937cc7b"
+$MUImspChecksum64 = '3bd1b3ef7b9ee6bb5871e5a7035650e1c3323647a546fe78f0d482038b2ad0bc3114dc141c0ee98ac355523422a33e5a0aab02bf0d0cb90f527d1a4e9d61f017'
 
 $MUIinstalled = $false
 $UpdateOnly = $false
