@@ -11,8 +11,10 @@ $MUImspURL64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/23
 $MUImspChecksum = '0b42a8d5fcabc10b7badac93a9ab1095efa375d6dfa74c9bb9ee40fbb1cd7d919498551c4bae16373e9ea8bcf16085abf8c4b1cdd19c3baf503df15aa8568a0e'
 $MUImspChecksum64 = '3bd1b3ef7b9ee6bb5871e5a7035650e1c3323647a546fe78f0d482038b2ad0bc3114dc141c0ee98ac355523422a33e5a0aab02bf0d0cb90f527d1a4e9d61f017'
 
+
 $MUIinstalled = $false
-$UpdateOnly = $false
+$PerformNewInstall = $false
+$ApplyPatch = $false
 [array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' Acrobat', ' Acrobat*')
 
 $MUImspURL -match 'AcroRdrDCUpd(\d+)_'
@@ -22,7 +24,8 @@ $PackageParameters = Get-PackageParameters
 
 if ($key.Count -eq 1) {
    $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
-   if ($key[0].DisplayName -match 'Adobe Acrobat Reader' -and $key[0].DisplayName -notmatch 'MUI') {
+   $IsAdobeAcrobatReader = $key[0].DisplayName -match 'Adobe Acrobat Reader'
+   if ($IsAdobeAcrobatReader -and $key[0].DisplayName -notmatch 'MUI') {
       if (($InstalledVersion -ge $UpdaterVersion) -and !($PackageParameters.OverwriteInstallation)) {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
          Write-Warning "You will need to uninstall $($key[0].DisplayName) first or use /OverwriteInstallation."
@@ -49,7 +52,13 @@ if ($key.Count -eq 1) {
          Throw 'Installation halted.'
       }
       else {
-         $UpdateOnly = $true
+         # for installations where there is an e.g. existing "Adobe Acrobat Reader DC MUI" present,
+         # we perform a new installation otherwise we apply the patch
+         if ($IsAdobeAcrobatReader) {
+            $PerformNewInstall = $true
+         } else {
+            $ApplyPatch = $true
+         }
       }
    }
 }
@@ -59,6 +68,9 @@ elseif ($key.count -gt 1) {
    Write-Warning 'The following installs were found:'
    $key | ForEach-Object { Write-Warning "- $($_.DisplayName)`t$($_.DisplayVersion)" }
    Throw 'Installation halted.'
+}
+else {
+   $PerformNewInstall = $true
 }
 
 if ($PackageParameters.OverwriteInstallation) {
@@ -174,23 +186,7 @@ $DownloadArgs = @{
 }
 $mspPath = Get-ChocolateyWebFile @DownloadArgs
 
-if ($UpdateOnly) {
-   $UpdateArgs = @{
-      Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
-      " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
-      ExetoRun       = 'msiexec.exe'
-      validExitCodes = @(0, 1603)
-   }
-   $exitCode = Start-ChocolateyProcessAsAdmin @UpdateArgs
-
-   if ($exitCode -eq 1603) {
-      Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
-      Write-Warning 'The update log should provide more details about the encountered issue:'
-      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log"
-      Throw "Patching of $env:ChocolateyPackageName to the latest version was unsuccessful."
-   }
-}
-else {
+if ($PerformNewInstall) {
    $DownloadArgs = @{
       packageName         = $env:ChocolateyPackageName
       FileFullPath        = Join-Path $env:TEMP "$env:ChocolateyPackageName.$env:ChocolateyPackageVersion.installer.exe"
@@ -214,11 +210,35 @@ else {
    }
    $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
 
+   # check if the patch should be applied separately
+   [array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' Acrobat', ' Acrobat*')
+   $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
+   $ApplyPatch = $InstalledVersion -lt $UpdaterVersion
+
    if ($exitCode -eq 1603) {
       Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
       Write-Warning 'The install log should provide more details about the encountered issue:'
       Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log"
       Throw "Installation of $env:ChocolateyPackageName was unsuccessful."
+   }
+}
+
+if ($ApplyPatch) {
+   Write-Host 'Applying patch.'
+
+   $UpdateArgs = @{
+      Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
+      " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log`""
+      ExetoRun       = 'msiexec.exe'
+      validExitCodes = @(0, 1603)
+   }
+   $exitCode = Start-ChocolateyProcessAsAdmin @UpdateArgs
+
+   if ($exitCode -eq 1603) {
+      Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
+      Write-Warning 'The update log should provide more details about the encountered issue:'
+      Write-Warning "   $env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Update.log"
+      Throw "Patching of $env:ChocolateyPackageName to the latest version was unsuccessful."
    }
 }
 
