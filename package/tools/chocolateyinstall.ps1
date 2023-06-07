@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-$DisplayName = 'Adobe Acrobat Reader DC MUI'
+$DisplayName = 'Adobe Acrobat'
 
 $MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe'
 $MUIurl64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300120093/AcroRdrDCx642300120093_MUI.exe'
@@ -13,7 +13,7 @@ $MUImspChecksum64 = '3bd1b3ef7b9ee6bb5871e5a7035650e1c3323647a546fe78f0d482038b2
 
 $MUIinstalled = $false
 $UpdateOnly = $false
-[array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' MUI', '*')
+[array]$key = Get-UninstallRegistryKey -SoftwareName $DisplayName.replace(' Acrobat', ' Acrobat*')
 
 $MUImspURL -match 'AcroRdrDCUpd(\d+)_'
 $UpdaterVersion = $Matches[1]
@@ -22,7 +22,7 @@ $PackageParameters = Get-PackageParameters
 
 if ($key.Count -eq 1) {
    $InstalledVersion = $key[0].DisplayVersion.replace('.', '')
-   if ($key[0].DisplayName -notmatch 'MUI') {
+   if ($key[0].DisplayName -match 'Adobe Acrobat Reader' -and $key[0].DisplayName -notmatch 'MUI') {
       if (($InstalledVersion -ge $UpdaterVersion) -and !($PackageParameters.OverwriteInstallation)) {
          Write-Warning "The currently installed $($key[0].DisplayName) is a single-language install."
          Write-Warning "You will need to uninstall $($key[0].DisplayName) first or use /OverwriteInstallation."
