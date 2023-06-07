@@ -24,7 +24,7 @@ searchreplace:
     - regwxp: (^\s*[$]*MUImspChecksum\s*=\s*)('.*')
       replace: "$MUImspChecksum = '{{ file_hash }}'"
     - regwxp: (^\s*[$]*MUImspChecksum64\s*=\s*)('.*')
-      replace: '$MUImspChecksum64 = "{{ file64_hash  | default() }}"'
+      replace: "$MUImspChecksum64 = '{{ file64_hash  | default() }}'"
 
 # readme to description
 readme:
