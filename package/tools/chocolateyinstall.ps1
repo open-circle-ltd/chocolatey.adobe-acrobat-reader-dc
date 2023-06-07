@@ -1,23 +1,15 @@
-$LicensedCommandsRegistered = Get-Command "Invoke-ValidateChocolateyLicense" -EA SilentlyContinue
-if (!$LicensedCommandsRegistered) {
-  Write-Warning "Package Requires Commercial License - Installation cannot continue as Package Internalizer use require endpoints to be licensed with Chocolatey Licensed Extension v3.0.0+ (chocolatey.extension). Please see error below for details and correction instructions."
-  throw "This package requires a commercial edition of Chocolatey as it was built/internalized with commercial features. Please install the license and install/upgrade to Chocolatey Licensed Extension v3.0.0+ as per https://docs.chocolatey.org/en-us/licensed-extension/setup."
-}
-
-Invoke-ValidateChocolateyLicense -RequiredLicenseTypes @('Business','ManagedServiceProvider')
-
 $ErrorActionPreference = 'Stop'
 
 $DisplayName = 'Adobe Acrobat Reader DC MUI'
 
-$MUIurl = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)\files\AcroRdrDC1500720033_MUI.exe"
-$MUIurl64 = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)\files\AcroRdrDCx642300120093_MUI.exe"
+$MUIurl = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/1500720033/AcroRdrDC1500720033_MUI.exe'
+$MUIurl64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300120093/AcroRdrDCx642300120093_MUI.exe'
 $MUIchecksum = 'dfc4b3c70b7ecaeb40414c9d6591d8952131a5fffa0c0f5964324af7154f8111'
 $MUIchecksum64 = '69a3b05f4b90445024963af79b37520f26b289a8979894a5c9d8ef9c290c2ee4'
-$MUImspURL = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)\files\AcroRdrDCUpd2300320201_MUI.msp"
-$MUImspURL64 = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)\files\AcroRdrDCx64Upd2300320201_MUI.msp"
+$MUImspURL = 'https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300320201/AcroRdrDCUpd2300320201_MUI.msp'
+$MUImspURL64 = 'https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2300320201/AcroRdrDCx64Upd2300320201_MUI.msp'
 $MUImspChecksum = '0b42a8d5fcabc10b7badac93a9ab1095efa375d6dfa74c9bb9ee40fbb1cd7d919498551c4bae16373e9ea8bcf16085abf8c4b1cdd19c3baf503df15aa8568a0e'
-$MUImspChecksum64 = '3BD1B3EF7B9EE6BB5871E5A7035650E1C3323647A546FE78F0D482038B2AD0BC3114DC141C0EE98AC355523422A33E5A0AAB02BF0D0CB90F527D1A4E9D61F017'
+$MUImspChecksum64 = "3BD1B3EF7B9EE6BB5871E5A7035650E1C3323647A546FE78F0D482038B2AD0BC3114DC141C0EE98AC355523422A33E5A0AAB02BF0D0CB90F527D1A4E9D61F017"
 
 $MUIinstalled = $false
 $UpdateOnly = $false
@@ -180,7 +172,7 @@ $DownloadArgs = @{
    checksumType        = 'SHA512'
    GetOriginalFileName = $true
 }
-$mspPath = Get-ChocolateyWebFileCmdlet @DownloadArgs
+$mspPath = Get-ChocolateyWebFile @DownloadArgs
 
 if ($UpdateOnly) {
    $UpdateArgs = @{
@@ -209,7 +201,7 @@ else {
       checksumType        = 'SHA256'
       GetOriginalFileName = $true
    }
-   $MUIexePath = Get-ChocolateyWebFileCmdlet @DownloadArgs
+   $MUIexePath = Get-ChocolateyWebFile @DownloadArgs
 
    $packageArgsEXE = @{
       packageName    = "$env:ChocolateyPackageName (installer)"
@@ -220,7 +212,7 @@ else {
       " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Install.log`""
       validExitCodes = @(0, 1000, 1101, 1603)
    }
-   $exitCode = Install-ChocolateyInstallPackageCmdlet @packageArgsEXE
+   $exitCode = Install-ChocolateyInstallPackage @packageArgsEXE
 
    if ($exitCode -eq 1603) {
       Write-Warning "For code 1603, Adobe recommends to 'shut down Microsoft Office and all web browsers' and try again."
