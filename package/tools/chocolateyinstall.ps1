@@ -226,7 +226,7 @@ else {
 [array]$32_or_64bitsoftware = get-itemproperty 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
 [array]$32_on_64bitsoftware = get-itemproperty 'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
 $installedProducts = [system.linq.enumerable]::union([object[]]$32_or_64bitsoftware, [object[]]$32_on_64bitsoftware)
-if (($installedProducts | Where-Object {($_.DisplayName -contains 'Adobe Acrobat (64-bit)') -and ($_.DisplayVersion.replace('.', '') -eq  $UpdaterVersion)} | measure).Count -lt 1){
+if (($installedProducts | Where-Object {(($_.DisplayName -contains 'Adobe Acrobat (64-bit)') -or ($_.DisplayName -contains 'Adobe Acrobat Reader')) -and ($_.DisplayVersion.replace('.', '') -eq $UpdaterVersion)} | measure).Count -lt 1){
    $UpdateArgs = @{
       Statements     = "/p `"$mspPath`" /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES $options" +
       " /L*v `"$env:TEMP\$env:chocolateyPackageName.$env:chocolateyPackageVersion.Reupdate.log`""
